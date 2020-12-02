@@ -22,23 +22,63 @@
     ;; (format t "~a, ~a~%" str x)))
 
 
-(let ((in (open "./input/02.txt" :if-does-not-exist nil))
-      (correct 0))
-  (when in
-    (loop for line = (read-line in nil)
-         while line do 
-            (let ((parts (split-str line))
-                  (occurrances 0))
-                (let ((limits (split-str (car parts) "-"))
-                      (chr (subseq (cadr parts) 0 1))
-                      (password (caddr parts)))
-                    (let ((lower (car limits))
-                          (upper (cadr limits)))
-                        (setq occurrances (count-occurrances password chr))
-                        ;; (format t "~a, ~a, ~a, ~a, ~a~%" lower upper chr password occurrances)
-                        (when (and (>= occurrances (parse-integer lower)) (<= occurrances (parse-integer upper)))
-                          (setf correct (1+ correct))
-                        )
-                        ))))
-    (close in))
-  (print correct))
+(defun part-1 ()
+  (let ((in (open "./input/02.txt" :if-does-not-exist nil))
+        (correct 0))
+    (when in
+      (loop for line = (read-line in nil)
+          while line do 
+              (let ((parts (split-str line))
+                    (occurrances 0))
+                  (let ((limits (split-str (car parts) "-"))
+                        (chr (subseq (cadr parts) 0 1))
+                        (password (caddr parts)))
+                      (let ((lower (car limits))
+                            (upper (cadr limits)))
+                          (setq occurrances (count-occurrances password chr))
+                          ;; (format t "~a, ~a, ~a, ~a, ~a~%" lower upper chr password occurrances)
+                          (when (and (>= occurrances (parse-integer lower)) (<= occurrances (parse-integer upper)))
+                            (setf correct (1+ correct))
+                          )
+                          ))))
+      (close in))
+    (print correct)))
+
+;; (defun xor (a b)
+;;   (and 
+;;    (not (and a b))
+;;    (or a b)))
+
+(defun part-2 ()
+  (let ((in (open "./input/02.txt" :if-does-not-exist nil))
+        (correct 0))
+    (when in
+      (loop for line = (read-line in nil)
+          while line do 
+              (let ((parts (split-str line))
+                    (occurrances 0))
+                  (let ((limits (split-str (car parts) "-"))
+                        (chr (char (cadr parts) 0))
+                        (password (caddr parts)))
+                      (let ((lower (parse-integer (car limits)))
+                            (upper (parse-integer (cadr limits))))
+                          (let ((1st (char password (1- lower)))
+                                (2nd (char password (1- upper))))
+                                ;; (format t "~a, ~a, ~a, ~a, ~a, ~a~%" lower upper chr password 1st 2nd)
+                                (when (xor (char= chr 1st) (char= chr 2nd))
+                                  (setf correct (1+ correct))
+                                )
+                          )
+                      )
+                  )
+              )
+      )
+
+                          
+                          
+
+
+      (close in))
+    (print correct)))
+
+(part-2)
