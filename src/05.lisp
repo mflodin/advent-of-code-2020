@@ -3,6 +3,7 @@
 (use-package :iterate)
 
 (defparameter *input* (uiop:read-file-lines "./input/05.txt"))
+(defparameter *test-input* (uiop:read-file-lines "./test-input/05.txt"))
 
 (defun get-seat (boarding-pass)
     (let ((rows (subseq boarding-pass 0 7))
@@ -36,8 +37,28 @@
     (print (apply #'max (get-seats input))))
     
 
+(defun find-seat (seats)
+    (let ((seat -1) (current -1) (next -1))
+        (iter (for remaining on seats)
+            (setf current (car remaining))
+            (setf next (cadr remaining))
 
-(05-1 *input*)
+            (when (and next (/= (+ current 1) next))
+                (setf seat (+ current 1)))
+
+            ;; (format t "~%current: ~a next: ~a remaining: ~a" current next remaining)
+        )
+    seat)
+)
+
+;; (print (find-seat '(3 4 6 7)))
+
+;; (05-1 *input*)
+
+(defun 05-2 (input)
+    (print (find-seat (sort (get-seats input) #'<))))
+
+(05-2 *input*)
 
 
 
